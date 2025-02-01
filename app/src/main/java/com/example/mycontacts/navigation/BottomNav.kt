@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Home
@@ -22,8 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
 import com.example.mycontacts.ContactsApp
+import com.example.mycontacts.presentation.contact.ContactsScreen
 import com.example.mycontacts.presentation.dialar.DialerScreen
-import com.example.mycontacts.ui.theme.MyContactsTheme
 import com.example.mycontacts.ui.theme.md_theme_dark_secondary
 import com.example.mycontacts.ui.theme.md_theme_light_secondary
 import androidx.compose.material3.Text as Text1
@@ -34,8 +35,9 @@ sealed class BottomNavItem(
     val icon: ImageVector,
     val label: String
 ) {
-    object Home : BottomNavItem("home", Icons.Filled.Call, "Dialer")
+    object Home : BottomNavItem("home", Icons.Filled.Call, "Dial")
     object Settings : BottomNavItem("settings", Icons.Filled.AccountCircle, "Contacts")
+    object Contact : BottomNavItem("contact", Icons.Filled.AccountBox, "All Contact")
 }
 
 @Composable
@@ -47,7 +49,7 @@ fun MainScreen() {
     Scaffold(
         bottomBar = {
             BottomNavigationBar(
-                items = listOf(BottomNavItem.Home, BottomNavItem.Settings),
+                items = listOf(BottomNavItem.Home, BottomNavItem.Settings, BottomNavItem.Contact),
                 currentRoute = currentRoute ?: BottomNavItem.Home.route,
                 onItemSelected = { item ->
                     navController.navigate(item.route) {
@@ -102,39 +104,8 @@ fun SetupNavGraph(navController: NavHostController) {
         composable(BottomNavItem.Settings.route) {
             ContactsApp()
         }
-    }
-}
-
-@Composable
-fun HomeScreen() {
-    // Replace with your Home screen content
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Text1(
-            text = "Home Screen",
-            style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Center
-        )
-    }
-}
-
-@Composable
-fun SettingsScreen() {
-    // Replace with your Settings screen content
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Text1(
-            text = "Settings Screen",
-            style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Center
-        )
+        composable(BottomNavItem.Contact.route) {
+            ContactsScreen()
+        }
     }
 }
