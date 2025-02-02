@@ -1,33 +1,34 @@
 package com.example.mycontacts.presentation.contact.detailScreen
 
 import android.Manifest
-import android.annotation.SuppressLint
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Icon
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Call
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Call
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,21 +41,29 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import com.example.mycontacts.R
 import com.example.mycontacts.presentation.contact.ContactUiState
 import com.example.mycontacts.presentation.contact.entryScreen.ContactInputForm
 
+/**
+ * @param onFavoriteChanged Callback invoked with the new favorite status.
+ * Typically, you will pass a ViewModel function here to update the contact in the database.
+ */
 @Composable
 fun DetailsBody(
     contactUiState: ContactUiState,
     onDelete: () -> Unit,
+    onFavoriteChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    // Manage the delete confirmation and favorite state.
     var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
-
+    // Initialize favorite state from the contactUiState
+    var isFavorite by rememberSaveable(contactUiState.id) {
+        mutableStateOf(contactUiState.isFavorite)
+    }
     Column(
         modifier = modifier
             .padding(16.dp)
@@ -62,7 +71,7 @@ fun DetailsBody(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         // Profile Image
-        Box(modifier = Modifier.align(alignment = Alignment.CenterHorizontally)) {
+        Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
             Image(
                 painter = painterResource(R.drawable.ic_profile),
                 contentDescription = "stringResource(R.string.profile_image)",
@@ -83,6 +92,15 @@ fun DetailsBody(
             contactUiState = contactUiState,
             enabled = false,
         )
+
+        FavoriteButton(
+            isFavorite = isFavorite,
+            onFavoriteClick = {
+                isFavorite = !isFavorite
+                onFavoriteChanged(isFavorite)
+            }
+        )
+
 
         // Call Button
         CallButton(
@@ -116,15 +134,41 @@ fun DetailsBody(
 }
 
 @Composable
+fun FavoriteButton(
+    isFavorite: Boolean,
+    onFavoriteClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    // Use an IconButton to toggle the favorite state.
+    IconButton(
+        onClick = onFavoriteClick,
+        modifier = modifier
+    ) {
+        if (isFavorite) {
+            Icon(
+                imageVector = Icons.Filled.Favorite,
+                contentDescription = "stringResource(R.string.remove_from_favorites)",
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(24.dp)
+            )
+        } else {
+            Icon(
+                imageVector = Icons.Outlined.FavoriteBorder,
+                contentDescription =" stringResource(R.string.add_to_favorites)",
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(24.dp)
+            )
+        }
+    }
+}
+
+@Composable
 fun CallButton(phoneNumber: String, modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
     OutlinedButton(
-        onClick = {
-            initiatePhoneDialer(context, phoneNumber)
-        },
-        modifier = modifier
-            .fillMaxWidth(),
+        onClick = { initiatePhoneDialer(context, phoneNumber) },
+        modifier = modifier.fillMaxWidth(),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
         colors = ButtonDefaults.outlinedButtonColors(
             contentColor = MaterialTheme.colorScheme.primary
@@ -132,11 +176,11 @@ fun CallButton(phoneNumber: String, modifier: Modifier = Modifier) {
     ) {
         Icon(
             imageVector = Icons.Filled.Call,
-            contentDescription = "stringResource(R.string.call_contact)",
+            contentDescription = "",
             modifier = Modifier.size(20.dp)
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Text(text ="Call Now")
+        Text(text = "Call Now")
     }
 }
 

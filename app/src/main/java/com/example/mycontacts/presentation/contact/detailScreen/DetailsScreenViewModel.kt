@@ -9,8 +9,8 @@ import com.example.mycontacts.presentation.contact.toContact
 import com.example.mycontacts.presentation.contact.toContactUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 @HiltViewModel
 class DetailsScreenViewModel @Inject constructor(
     state: SavedStateHandle,
@@ -31,7 +31,15 @@ class DetailsScreenViewModel @Inject constructor(
         private const val TIMEOUT_MILLIS = 5_000L
     }
 
-    suspend fun deleteContact(){
+    suspend fun deleteContact() {
         contactsRepository.deleteContact(uiState.value.toContact())
+    }
+
+    // New method to update the favorite status.
+    fun updateFavoriteStatus(newFavorite: Boolean) = viewModelScope.launch {
+        // Convert the UI state to your Contact data model, update the favorite flag,
+        // then call the repository's update function.
+        val updatedContact = uiState.value.toContact().copy(isFavorite = newFavorite)
+        contactsRepository.updateContact(updatedContact)
     }
 }

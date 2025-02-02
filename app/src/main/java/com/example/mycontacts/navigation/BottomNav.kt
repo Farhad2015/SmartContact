@@ -9,6 +9,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Call
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.MaterialTheme
@@ -23,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
 import com.example.mycontacts.ContactsApp
+import com.example.mycontacts.presentation.FavoriteHomeBody
 import com.example.mycontacts.presentation.contact.ContactsScreen
 import com.example.mycontacts.presentation.dialar.DialerScreen
 import com.example.mycontacts.ui.theme.md_theme_dark_secondary
@@ -36,8 +39,9 @@ sealed class BottomNavItem(
     val label: String
 ) {
     object Home : BottomNavItem("home", Icons.Filled.Call, "Dial")
-    object Settings : BottomNavItem("settings", Icons.Filled.AccountCircle, "Contacts")
+    object Settings : BottomNavItem("settings", Icons.Filled.AccountCircle, "My Contact")
     object Contact : BottomNavItem("contact", Icons.Filled.AccountBox, "All Contact")
+    object Favorite : BottomNavItem("contact", Icons.Filled.Favorite, "Favorites")
 }
 
 @Composable
@@ -49,7 +53,7 @@ fun MainScreen() {
     Scaffold(
         bottomBar = {
             BottomNavigationBar(
-                items = listOf(BottomNavItem.Home, BottomNavItem.Settings, BottomNavItem.Contact),
+                items = listOf(BottomNavItem.Home, BottomNavItem.Settings, BottomNavItem.Contact,BottomNavItem.Favorite),
                 currentRoute = currentRoute ?: BottomNavItem.Home.route,
                 onItemSelected = { item ->
                     navController.navigate(item.route) {
@@ -106,6 +110,9 @@ fun SetupNavGraph(navController: NavHostController) {
         }
         composable(BottomNavItem.Contact.route) {
             ContactsScreen()
+        }
+        composable(BottomNavItem.Favorite.route) {
+            FavoriteHomeBody()
         }
     }
 }

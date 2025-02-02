@@ -3,6 +3,7 @@ package com.example.mycontacts.domain.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+
 @Entity(tableName = "contacts")
 data class Contact(
     @PrimaryKey(autoGenerate = true)
@@ -11,6 +12,7 @@ data class Contact(
     val lastName: String,
     val address: String,
     val gender: String,
+    val isFavorite: Boolean = false // New favorite column
 ) {
     fun doesMatchSearchQuery(query: String): Boolean {
         val matchingCombinations = listOf(
@@ -18,9 +20,8 @@ data class Contact(
             "$firstName $lastName",
             "${firstName.first()} ${lastName.first()}",
         )
-        return matchingCombinations.any() {
+        return matchingCombinations.any {
             it.contains(query, ignoreCase = true)
         }
     }
 }
-

@@ -8,7 +8,8 @@ data class ContactUiState(
     val lastName: String = "",
     val address: String = "",
     val gender: String = "",
-    val actionEnable: Boolean = false
+    val actionEnable: Boolean = false,
+    val isFavorite: Boolean = false
 )
 
 fun ContactUiState.toContact(): Contact = Contact(

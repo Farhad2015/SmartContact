@@ -65,6 +65,12 @@ fun DetailsScreen(
                     navigateBack()
                 }
             },
+            onFavoriteChanged = { newFavorite ->
+                // Launch a coroutine (if not already in a coroutine scope) to update the contact
+                coroutineScope.launch {
+                    viewModel.updateFavoriteStatus(newFavorite)
+                }
+            },
             modifier = modifier
                 .padding(innerPadding)
                 .background(MaterialTheme.colorScheme.background)
