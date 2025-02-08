@@ -61,7 +61,7 @@ fun FavoriteHomeBody(
                 modifier = Modifier.size(200.dp)
             )
             Text(
-                text =" stringResource(R.string.no_favorites)",
+                text ="No Favorite Number Available",
                 textAlign = TextAlign.Center,
                 fontSize = 20.sp,
             )

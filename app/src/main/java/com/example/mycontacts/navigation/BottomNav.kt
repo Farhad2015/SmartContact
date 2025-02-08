@@ -41,7 +41,7 @@ sealed class BottomNavItem(
     object Home : BottomNavItem("home", Icons.Filled.Call, "Dial")
     object Settings : BottomNavItem("settings", Icons.Filled.AccountCircle, "My Contact")
     object Contact : BottomNavItem("contact", Icons.Filled.AccountBox, "All Contact")
-    object Favorite : BottomNavItem("contact", Icons.Filled.Favorite, "Favorites")
+    object Favorite : BottomNavItem("favorite", Icons.Filled.Favorite, "Favorites")
 }
 
 @Composable
