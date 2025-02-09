@@ -38,10 +38,10 @@ sealed class BottomNavItem(
     val icon: ImageVector,
     val label: String
 ) {
-    object Home : BottomNavItem("home", Icons.Filled.Call, "Dial")
-    object Settings : BottomNavItem("settings", Icons.Filled.AccountCircle, "My Contact")
-    object Contact : BottomNavItem("contact", Icons.Filled.AccountBox, "All Contact")
-    object Favorite : BottomNavItem("favorite", Icons.Filled.Favorite, "Favorites")
+    object Home : BottomNavItem("home", Icons.Filled.Call, "Dialar")
+    object Settings : BottomNavItem("settings", Icons.Filled.AccountCircle, "Saved")
+    object Contact : BottomNavItem("contact", Icons.Filled.AccountBox, "Contacts")
+    object Favorite : BottomNavItem("favorite", Icons.Filled.Favorite, "Favorite")
 }
 
 @Composable
@@ -112,7 +112,7 @@ fun SetupNavGraph(navController: NavHostController) {
             ContactsScreen()
         }
         composable(BottomNavItem.Favorite.route) {
-            FavoriteHomeBody()
+            FavoriteHomeBody(navController)
         }
     }
 }

@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.mycontacts.R
 import com.example.mycontacts.domain.model.Contact
 import com.example.mycontacts.presentation.homeScreen.HomeViewModel
@@ -41,6 +42,7 @@ import com.example.mycontacts.presentation.homeScreen.composables.SearchComponen
 // A composable similar to HomeBody, but filtering to only show favorites.
 @Composable
 fun FavoriteHomeBody(
+    navController: NavController,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
 
@@ -61,7 +63,7 @@ fun FavoriteHomeBody(
                 modifier = Modifier.size(200.dp)
             )
             Text(
-                text ="No Favorite Number Available",
+                text =" stringResource(R.string.no_favorites)",
                 textAlign = TextAlign.Center,
                 fontSize = 20.sp,
             )
@@ -126,3 +128,4 @@ fun initiatePhoneDialer(context: Context, phoneNumber: String) {
         context.startActivity(intent)
     }
 }
+
